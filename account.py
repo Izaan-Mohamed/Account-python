@@ -17,37 +17,51 @@ class Account:
 
 def transfer_funds(sender, receiver, amount, fee_account, fee_percent=0.05):
     fee = amount * fee_percent
-    total_deduction = amount + fee
+    total = amount + fee
 
-    print(f"\nTransferring ${amount:,.2f} from {sender.name} to {receiver.name} with ${fee:,.2f} fee to {fee_account.name}")
-    
-    sender.withdraw(total_deduction)
+    print(f"\nTransferring ${amount:,.2f} from {sender.name} to {receiver.name}...")
+    print(f"Transaction fee of ${fee:,.2f} goes to {fee_account.name}.")
+
+    sender.withdraw(total)
     receiver.deposit(amount)
     fee_account.deposit(fee)
 
-    print("Transfer complete.")
+    print("Transaction successful!\n")
 
 
+def main():
 
-account_A = Account("Account A", 50000)
-account_B = Account("Account B", 10000)
-account_C = Account("Account C (Fee Collector)", 0)
+    account_A = Account("Account A", 50000)
+    account_B = Account("Account B", 10000)
+    account_C = Account("Account C (Fee Collector)", 0)
+
+    print("Welcome to the Account Transfer System!\n")
+
+    while True:
+     
+        print(account_A)
+        print(account_B)
+        print(account_C)
+
+        try:
+            user_input = input("\nEnter amount to transfer from A to B (or type 'exit' to quit): ")
+            if user_input.lower() == 'exit':
+                print("Exiting. Goodbye!")
+                break
+
+            amount = float(user_input)
+
+            if amount <= 0:
+                print("Amount must be positive.")
+                continue
+
+            transfer_funds(account_A, account_B, amount, account_C)
+
+        except ValueError as e:
+            print(f"Error: {e}")
+
+        print("-" * 40)
 
 
-print("Initial Balances:")
-print(account_A)
-print(account_B)
-print(account_C)
-
-
-try:
-    transfer_amount = 10000  
-    transfer_funds(account_A, account_B, transfer_amount, account_C)
-except ValueError as e:
-    print(f"Error: {e}")
-
-
-print("\nFinal Balances:")
-print(account_A)
-print(account_B)
-print(account_C)
+if __name__ == "__main__":
+    main()
